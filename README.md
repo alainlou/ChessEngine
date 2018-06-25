@@ -1,5 +1,6 @@
 #BrothFish
 
+##Introduction
 Get it? - like Stockfish but better hahaha :)
 
 There are three main subtasks in this repository:
@@ -10,3 +11,7 @@ There are three main subtasks in this repository:
 This is a Universal Chess Interface engine and uses the lichess-bot bridge (https://github.com/careless25/lichess-bot) to play on lichess.org.
 
 Made by Ian Chow and Alain Lou with inspiration from Dimitri Komarov's "big brain moves".
+
+##Requirements:
+1. lichess-bot (https://github.com/careless25/lichess-bot)
+2. python-chess (https://github.com/niklasf/python-chess)
