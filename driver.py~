@@ -6,12 +6,6 @@ import time
 name = "Brothfish"
 author = "Alain Lou"
 
-board = chess.Board()
-
-def uciHandler(message):
-    if message[1] == "position":
-        loadPositionOnto(board)
-
 def processMessages():
     message = input().split()
     print("haha")
@@ -26,6 +20,8 @@ def processMessages():
 thread1 = threading.Thread(target=processMessages)
 thread1.daemon = True
 thread1.start()
+
+board = chess.Board()
 
 while True:
     status = processMessages()
