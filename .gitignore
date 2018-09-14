@@ -1,2 +1,7 @@
-#The official LiChess bot client
+#LiChess bot client
 /lichess-bot
+
+#Non-source temporary files (swaps, etc.)
+*.swp
+*.un~
+*.py~
