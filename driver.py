@@ -6,24 +6,24 @@ import time
 name = "Brothfish"
 author = "Alain Lou"
 
-def wait():
-    while True:
-        time.sleep(2)
-        print("going")
+def processMessages():
+    message = input().split()
+    print("haha")
+    if message[0] == "stop":
+        return False
+        sys.exit()
+    elif message[0] == "uci":
+        return True
+    else:
+        return False
 
-def exit():
-    print("stopped")
-
-thread1 = threading.Thread(target=wait)
+thread1 = threading.Thread(target=processMessages)
 thread1.daemon = True
 thread1.start()
 
 board = chess.Board()
 
 while True:
-    if input() == "stop":
-        exit()
-        sys.exit()
+    if not processMessages:#right now this only executes once
+        print("ok")
         break
-    else:
-        print("continuing")
