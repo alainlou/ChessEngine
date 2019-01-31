@@ -5,3 +5,6 @@
 *.swp
 *.un~
 *.py~
+
+#Configuration Files
+/.vscode
