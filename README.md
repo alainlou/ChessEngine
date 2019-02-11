@@ -1,6 +1,5 @@
 # BrothFish
-Get it? - like Stockfish but better hahaha :)
-Made by Ian Chow and Alain Lou with inspiration from Dimitri Komarov's "big brain moves".
+Python 3 UCI chess engine
 
 ## Introduction
 There are three main subtasks in this repository:
