@@ -2,29 +2,38 @@ import chess
 
 board = chess.Board()
 
-def handleCommand(operation, parameters):
+noOption = ["uci", "isready"]
+
+moveCounter = 0
+
+def simpleCommand(operation):
     if operation == "uci":
         print("id name BrothFish")
         print("id author Alain Lou")
         print("uciok")
     elif operation == "isready":
         print("readyok")
-    elif operation == "position": #set the position of the internal board
-        if parameters[:8] != "startpos":
-            fenString = parameters[:parameters.index("moves")]
-            board.set_board_fen(fenString)
-        moves = parameters[parameters.index("moves")+5:].split()
-        for move in moves:
-            foo = chess.Move.from_uci(move)
-            board.push(foo)
+
+def handleCommand(operation, parameters, moveCounter):
+    if operation == "position": #set the position of the internal board
+        parameters = parameters.split()
+        board.push_uci(parameters[-1])
+        moveCounter += 1
     elif operation == "go":
-        print("bestmove h7h5")
+        moves = []
+        for move in board.legal_moves:
+            moves.append(move)
+        board.push(moves[0])
+        moveCounter += 1
+        print("bestmove", moves[0])
 
 # We can make this I/O loop async eventually
 while True:
     line = input()
     if line == "quit":
         break
+    elif not (" " in line):
+        simpleCommand(line)        
     else:
         flag = line.index(" ")
-        handleCommand(line[:flag], line[flag+1:])
+        handleCommand(line[:flag], line[flag+1:], moveCounter)
