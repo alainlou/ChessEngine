@@ -1,10 +1,38 @@
 import chess
 
-board = chess.Board()
+board: chess.Board = chess.Board()
 
-noOption = ["uci", "isready"]
+noOption: [str] = ["uci", "isready"]
+# Using Fischer's suggested values
+PIECE_VALUES: dict = {chess.PAWN: 100, chess.KNIGHT: 300, chess.BISHOP: 325, chess.ROOK: 500, chess.QUEEN: 900, chess.KING: 0}
 
-def simpleCommand(operation):
+# Evaluates a board based on total centipawn value of white pieces - total centipawn value of black pieces
+def eval(board: chess.Board) -> int:
+    value = 0
+
+    for key in PIECE_VALUES.keys():
+        value += len(board.pieces(key, chess.WHITE)) * PIECE_VALUES[key]
+        value -= len(board.pieces(key, chess.BLACK)) * PIECE_VALUES[key]
+
+    return -value
+
+def findMove(board: chess.Board, moves: [chess.Move]) -> chess.Move:
+    bestEval: int = -999999999
+    bestMove: chess.Move = moves[0]
+
+    for move in moves:
+        board.push(move)
+        currEval = eval(board)
+        if(currEval > bestEval):
+            bestEval = currEval
+            bestMove = move
+        board.pop()
+    
+    return bestMove
+
+
+
+def simpleCommand(operation: str):
     if operation == "uci":
         print("id name BrothFish")
         print("id author Alain Lou")
@@ -12,7 +40,7 @@ def simpleCommand(operation):
     elif operation == "isready":
         print("readyok")
 
-def handleCommand(operation, parameters):
+def handleCommand(operation: str, parameters: [str]):
     # TODO handle when they give FEN notation
     global board
 
@@ -25,17 +53,17 @@ def handleCommand(operation, parameters):
         moves = []
         for move in board.legal_moves:
             moves.append(move)
-        board.push(moves[0])
-        print("bestmove", moves[0])
+        toMove: chess.Move = findMove(board, moves)
+        board.push(toMove)
+        print("bestmove", toMove)
 
 # We can make this I/O loop async eventually
 while True:
-    line = input()
+    line: str = input()
     if line == "quit":
         break
     elif not " " in line:
         simpleCommand(line)        
     else:
-        print(line)
         flag = line.index(" ")
         handleCommand(line[:flag], line[flag+1:])
