@@ -14,7 +14,7 @@ def eval(board: chess.Board) -> int:
         value += len(board.pieces(key, chess.WHITE)) * PIECE_VALUES[key]
         value -= len(board.pieces(key, chess.BLACK)) * PIECE_VALUES[key]
 
-    return -value
+    return value
 
 def findMove(board: chess.Board, moves: [chess.Move]) -> chess.Move:
     bestEval: int = -999999999
@@ -22,12 +22,20 @@ def findMove(board: chess.Board, moves: [chess.Move]) -> chess.Move:
 
     for move in moves:
         board.push(move)
-        currEval = eval(board)
+        currEval = -999999999
+
+        if board.turn == chess.BLACK:
+            currEval = eval(board)
+        else:
+            currEval = -eval(board)
+        
         if(currEval > bestEval):
             bestEval = currEval
             bestMove = move
         board.pop()
     
+    # TODO implement minimax
+
     return bestMove
 
 
