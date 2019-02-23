@@ -3,6 +3,7 @@ import chess
 board: chess.Board = chess.Board()
 
 noOption: [str] = ["uci", "isready"]
+
 # Using Fischer's suggested values
 PIECE_VALUES: dict = {chess.PAWN: 100, chess.KNIGHT: 300, chess.BISHOP: 325, chess.ROOK: 500, chess.QUEEN: 900, chess.KING: 0}
 
@@ -10,9 +11,13 @@ PIECE_VALUES: dict = {chess.PAWN: 100, chess.KNIGHT: 300, chess.BISHOP: 325, che
 def eval(board: chess.Board) -> int:
     value = 0
 
+    # piece value evaluations
     for key in PIECE_VALUES.keys():
         value += len(board.pieces(key, chess.WHITE)) * PIECE_VALUES[key]
         value -= len(board.pieces(key, chess.BLACK)) * PIECE_VALUES[key]
+
+    # positional evaluations (it needs to take into account if anything is being attacked)
+    # evaluation of tempo distributed between the evaluation and search functions
 
     return value
 
