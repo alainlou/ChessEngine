@@ -21,29 +21,37 @@ def eval(board: chess.Board) -> int:
 
     return value
 
-def findMove(board: chess.Board, moves: [chess.Move]) -> chess.Move:
+def findMove(board: chess.Board) -> chess.Move:
     bestEval: int = -999999999
-    bestMove: chess.Move = moves[0]
 
-    for move in moves:
+    bestMove: chess.Move = None
+
+    for move in board.legal_moves:
         board.push(move)
-        currEval = -999999999
+        currEval = negamax(board, 3) if board.turn else -negamax(board,3)
+        print(currEval, end=" ")       
 
-        if board.turn == chess.BLACK:
-            currEval = eval(board)
-        else:
-            currEval = -eval(board)
-        
         if(currEval > bestEval):
             bestEval = currEval
             bestMove = move
-        board.pop()
-    
-    # TODO implement minimax
 
+        board.pop()
+
+    print()
     return bestMove
 
-
+# find the value of a position through negamax search at a given depth
+def negamax(board: chess.Board, depth: int):
+    bestEval = -999999999
+    if depth == 0:
+        return eval(board) if board.turn else -eval(board)
+    for move in board.legal_moves:
+        board.push(move)
+        currEval = -negamax(board, depth - 1) if board.turn else negamax(board, depth - 1)
+        if currEval > bestEval:
+            bestEval = currEval
+        board.pop()
+    return bestEval
 
 def simpleCommand(operation: str):
     if operation == "uci":
@@ -63,10 +71,7 @@ def handleCommand(operation: str, parameters: [str]):
             board.push_uci(parameters[-1])
 
     elif operation == "go":
-        moves = []
-        for move in board.legal_moves:
-            moves.append(move)
-        toMove: chess.Move = findMove(board, moves)
+        toMove: chess.Move = findMove(board)
         board.push(toMove)
         print("bestmove", toMove)
 
