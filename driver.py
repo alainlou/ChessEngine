@@ -123,7 +123,7 @@ def findMove(board: chess.Board) -> chess.Move:
 
     for move in board.legal_moves:
         board.push(move)
-        currEval = negamax(board, 2) if board.turn else -negamax(board,2)
+        currEval = negamax(board, 2)
         print(currEval, end=" ")       
 
         if(currEval > bestEval):
