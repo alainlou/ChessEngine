@@ -1,4 +1,4 @@
-# BrothFish
+# ChessEngine
 Python 3 UCI chess engine
 
 ## Introduction
