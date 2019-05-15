@@ -118,39 +118,38 @@ def eval(board: chess.Board) -> int:
 
 def findMove(board: chess.Board) -> chess.Move:
     bestEval: int = -999999999
-
     bestMove: chess.Move = None
-
     for move in board.legal_moves:
         board.push(move)
-        currEval = negamax(board, 4)
-        print(currEval, end=" ")       
-
+        currEval = negamax(board, 3, -10000, 10000)
         if(currEval > bestEval):
             bestEval = currEval
             bestMove = move
-
         board.pop()
-
-    print()
     return bestMove
 
 # find the value of a position through negamax search at a given depth
-def negamax(board: chess.Board, depth: int):
+def negamax(board: chess.Board, depth: int, alpha: int, beta: int):
     bestEval = -999999999
     if depth == 0:
         return eval(board) if board.turn else -eval(board)
     for move in board.legal_moves:
         board.push(move)
-        currEval = -negamax(board, depth - 1) if board.turn else negamax(board, depth - 1)
-        if currEval > bestEval:
-            bestEval = currEval
+        bestEval = -negamax(board, depth - 1, alpha, beta) if board.turn else negamax(board, depth - 1, alpha, beta)
         board.pop()
+        if(not board.turn):
+            alpha = max(alpha, bestEval)
+            if(beta <= alpha):
+                return bestEval
+        else:
+            beta = min(beta, bestEval)
+            if(beta <= alpha):
+                return bestEval
     return bestEval
 
 def simpleCommand(operation: str):
     if operation == "uci":
-        print("id name BrothFish")
+        print("id name ChessEngine")
         print("id author Alain Lou")
         print("uciok")
     elif operation == "isready":
